@@ -1,6 +1,7 @@
 .Layout{
     width: 600px;
-    height: 300px;
+    padding-bottom: 40px;
+    height: auto;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;

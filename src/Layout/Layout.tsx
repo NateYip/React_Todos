@@ -19,9 +19,10 @@ function Layout() {
             let newitem = { status: true, content: item.content, id: item.id }
             return newitem;
         })
-        SetList(nowList)
+        
         SetActive([])
         SetComplated(nowList)
+        SetList(nowList)
     }
     function AddtoList(e: String) {
         const newTodo = { status: false, content: e, id: count }

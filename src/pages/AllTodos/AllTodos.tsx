@@ -22,6 +22,7 @@ function AllTodos(props:any) {
                     <SigleList 
                     Change= {() =>props.Change(item.id)}
                     onClick= {() =>props.Delete(item.id)}
+                    Delete= {() =>props.Delete(item.id)}
                     id = {item.id}
                     Content = {item.content}
                     />
