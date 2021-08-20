@@ -47,6 +47,7 @@ function Layout() {
         } else {
             setCompleted(newComplete);
         }
+        SetStorage('List',List)
     },[List])
 
     
