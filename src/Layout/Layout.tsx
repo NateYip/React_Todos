@@ -11,61 +11,18 @@ interface todo {
     content: string;
 }
 function Layout() {
-    const [List, SetList] = useState<todo[]>([]);
-    const [Input, SetInput] = useState<string>('');
-    const [Active, SetActive] = useState<todo[]>([]);
-    const [Completed, SetCompleted] = useState<todo[]>([]);
-    const [count, SetCount] = useState<number>(0);
-
-    function ComplateAll() {
-        const nowList = List.map((item: any) => {
-            const newitem = { status: true, content: item.content, id: item.id };
-            return newitem;
-        })
-
-        SetActive([]);
-        SetCompleted(nowList);
-        SetList(nowList);
-    }
-
-    function inPutChange(e: any) {
-        const nowInput = e.target.value;
-        SetInput(nowInput);
-    }
-    interface HandleEventHook {
-        type: string;
-        id: number;
-    }
-    function HandleEvent(e: HandleEventHook) {
-        console.log("HandleEvent")
-        const newList = List;
-        switch (e.type) {
-            case 'Change':
-                List.forEach((item: any, index: number) => {
-                    if (item.id === e.id) {
-                        newList[index].status = !item.status;
-                    }
-                })
-                SetList(newList);
-                Update();
-                break;
-            case 'Delete':
-                List.forEach((item: any, index: number) => {
-                    if (item.id === e.id) {
-                        newList.splice(index, 1);
-                    }
-                })
-                SetList(newList);
-                Update();
-                break;
-        }
-    }
+    const [List, setList] = useState<todo[]>([]);
+    const [Input, setInput] = useState<string>('');
+    const [Active, setActive] = useState<todo[]>([]);
+    const [Completed, setCompleted] = useState<todo[]>([]);
+    const [count, setCount] = useState<number>(0);
 
 
-    function Update() {
+    //update List Active Completed
+    const memoizedUpdate = useCallback(() => {
         const newActive: todo[] = [];
         const newComplete: todo[] = [];
-        List.forEach((e: any) => {
+        List.forEach((e: todo) => {
             if (e.status === false) {
                 newActive.push(e);
             } else {
@@ -73,30 +30,80 @@ function Layout() {
             }
         });
         if (newActive.length === 0) {
-            SetActive([]);
+            setActive([]);
         } else {
-            SetActive(newActive);
+            setActive(newActive);
         }
         if (newComplete.length === 0) {
-            SetCompleted([]);
+            setCompleted([]);
         } else {
-            SetCompleted(newComplete);
+            setCompleted(newComplete);
+        }
+    },[List])
+
+
+    function ComplateAll() {
+        const nowList = List.map((item: todo) => {
+            const newitem = { status: true, content: item.content, id: item.id };
+            return newitem;
+        })
+        setActive([]);
+        setCompleted(nowList);
+        setList(nowList);
+    }
+
+
+    function inPutChange(e: any) {
+        const nowInput = e.target.value;
+        setInput(nowInput);
+    }
+
+
+    interface HandleEventParams {
+        type: string;
+        id: number;
+    }
+    function HandleEvent(e: HandleEventParams) {
+        console.log("HandleEvent")
+        const newList = List;
+        switch (e.type) {
+            case 'Change':
+                List.forEach((item: todo, index: number) => {
+                    if (item.id === e.id) {
+                        newList[index].status = !item.status;
+                    }
+                })
+                setList(newList);
+                memoizedUpdate();
+                break;
+            case 'Delete':
+                List.forEach((item: todo, index: number) => {
+                    if (item.id === e.id) {
+                        newList.splice(index, 1);
+                    }
+                })
+                setList(newList);
+                memoizedUpdate();
+                break;
         }
     }
+
+    
 
     function Clear() {
         console.log("Clear")
         const nowList: todo[] = []
-        List.forEach((item: any) => {
+        List.forEach((item: todo) => {
             if (item.status !== true) {
                 nowList.push(item)
             }
         })
-        SetList(nowList)
-        Update()
-        SetCompleted([])
+        setList(nowList)
+        memoizedUpdate()
+        setCompleted([])
     }
-
+    
+    //watch Enter-key to add new todo
     const handleKeydown = useCallback(
         (e: any) => {
             console.log("handleKeyDown mount!")
@@ -106,14 +113,15 @@ function Layout() {
                 const nowActive = Active.slice();
                 nowActive.push(newTodo);
                 nowList.push(newTodo);
-                SetCount(count + 1);
-                SetList(nowList);
-                SetActive(nowActive);
-                SetInput('');
+                setCount(count + 1);
+                setList(nowList);
+                setActive(nowActive);
+                setInput('');
             }
         }
         // eslint-disable-next-line
         , [Input])
+
 
     useEffect(() => {
         document.addEventListener('keydown', handleKeydown);
