@@ -1,4 +1,4 @@
-import { NavLink, BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
+import { NavLink, HashRouter, Switch, Route, Redirect } from 'react-router-dom';
 import AllTodos from '../pages/AllTodos/AllTodos'
 import LeftTodos from '../pages/LeftTodos/LeftTodos';
 import CompletedTodos from '../pages/CompletedTodos/CompletedTodos'
@@ -7,6 +7,7 @@ import InputTodos from '../components/Input/Input'
 import { useState, useEffect, useCallback } from 'react';
 //eslint-disable-next-line 
 import {SetStorage,GetStorage} from '../utils/Storage'
+
 
 
 interface todo {
@@ -128,7 +129,7 @@ function Layout() {
             }
         }
         // eslint-disable-next-line
-        , [])
+        , [Input])
 
 
     useEffect(() => {
@@ -137,7 +138,7 @@ function Layout() {
             document.removeEventListener('keydown', handleKeydown);
         }
         //eslint-disable-next-line 
-    }, [])
+    }, [Input])
     useEffect(() => {
         SetStorage('List',List)
     },[List])
@@ -151,7 +152,6 @@ function Layout() {
                 className={Style.Title}>
                 todos
             </div>
-            <BrowserRouter >
                 <div
                     className={Style.Head}>
                     <div
@@ -166,6 +166,8 @@ function Layout() {
                             onChange={(e: any) => inPutChange(e)} />
                     </div>
                 </div>
+            <HashRouter  >
+
                 <div>
                     <div
                         className={Style.switch}>
@@ -228,7 +230,7 @@ function Layout() {
                 </div>
 
 
-            </BrowserRouter >
+            </HashRouter >
 
         </div>
     )
