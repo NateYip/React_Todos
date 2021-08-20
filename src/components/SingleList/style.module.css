@@ -1,0 +1,19 @@
+.outer{
+  height:58px;
+  width: 600px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  background-color:#e7e7e7;
+}
+.content{
+  display: block;
+  height:30px;
+  width:400px;
+  overflow: hidden;
+}
+
+.btn{
+  border: none;
+  background-color:#e7e7e7;
+}

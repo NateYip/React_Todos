@@ -1,14 +1,18 @@
 import Style from  './Input.module.css'
 import{  useEffect } from 'react';
 
-function InputTodos (props: any) {
+interface inputProps {
+    value: string;
+    onChange(e:any):void;
+}
+function InputTodos (props: inputProps) {
     useEffect(()=>{
        
     })
     
     return (
        
-        <div onKeyDown={(e)=>props.onKeyDown(e)}>
+        <div >
             
             <input
             className={Style.input}

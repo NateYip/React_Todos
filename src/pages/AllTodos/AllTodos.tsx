@@ -1,17 +1,30 @@
 import  Style  from "../Todo.module.css"
-import SigleList from "../../components/SigleList/SigleList"
-function AllTodos(props:any) {
+import SingleList from "../../components/SingleList/SingleList"
+
+interface todo {
+    id: number;
+    status:boolean;
+    content:string;
+}
+interface todoProps {
+    Change(e:number): void;
+    Delete(e:number): void;
+    List:todo[];
+}
+
+function AllTodos(props:todoProps) {
     const List = props.List
     const nowList = List
-    const rendeList = nowList.map((item:any , index:number) => {
+    const renderList = nowList.map((item:any , index:number) => {
         if(item.status === false) {
             return(
                 
                 <li className={Style.undone} key = {index}>
-                    <SigleList 
+                    <SingleList 
                     Change= {() =>props.Change(item.id)}
                     Delete= {() =>props.Delete(item.id)}
                     id = {item.id}
+                    status ={item.status}
                     Content = {item.content}
                     />
                 </li>
@@ -19,11 +32,11 @@ function AllTodos(props:any) {
         }else {
             return(
                 <li className={Style.done} key = {index}>
-                    <SigleList 
+                    <SingleList 
                     Change= {() =>props.Change(item.id)}
-                    onClick= {() =>props.Delete(item.id)}
                     Delete= {() =>props.Delete(item.id)}
                     id = {item.id}
+                    status ={item.status}
                     Content = {item.content}
                     />
                 </li>
@@ -32,7 +45,7 @@ function AllTodos(props:any) {
     })
     return (
         <div>
-            {rendeList}
+            {renderList}
         </div>
     )
 }

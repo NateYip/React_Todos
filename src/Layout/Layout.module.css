@@ -26,8 +26,7 @@
     align-items: center;
 }
 
-.Link{
-}
+
 .NavLink{
     text-decoration:none
 }
@@ -36,7 +35,8 @@
     flex-direction:row;
     justify-content: space-around;
     align-items: center;
-    background-color: blanchedalmond;
+    height: 20px;
+    margin-bottom:10px;
     width:600px
 }
 .button {

@@ -1,6 +1,20 @@
 .undone{
-    background-color: red
+    height:58px;
+    border-top: 1px solid #ffffff;
+    border-bottom: 1px solid #ffffff;
+    width: 600px;
+    display: flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items: center;
 }
 .done{
-    background-color: green
+    height:58px;
+    border-top: 1px solid #ffffff;
+    border-bottom: 1px solid #ffffff;
+    width: 600px;
+    display: flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items: center;
 }
