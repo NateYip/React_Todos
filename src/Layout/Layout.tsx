@@ -20,9 +20,31 @@ function Layout() {
     const [Input, setInput] = useState<string>('');
     const [Active, setActive] = useState<todo[]>([]);
     const [Completed, setCompleted] = useState<todo[]>([]);
-    const [count, setCount] = useState<number>(0);
+   
+    
     useEffect(()=>{
         setList(GetStorage('List'))
+        const newActive: todo[] = [];
+        const newComplete: todo[] = [];
+        GetStorage('List').forEach((e: todo) => {
+            if (e.status === false) {
+                newActive.push(e);
+            } else {
+                newComplete.push(e);
+            }
+        });
+        if (newActive.length === 0) {
+            setActive([]);
+        } else {
+            setActive(newActive);
+        }
+        if (newComplete.length === 0) {
+            setCompleted([]);
+        } else {
+            setCompleted(newComplete);
+        }
+        SetStorage('List',List)
+        //eslint-disable-next-line
     },[])
     
 
@@ -117,13 +139,13 @@ function Layout() {
     const handleKeydown = useCallback(
         (e: any) => {
             console.log("handleKeyDown mount!")
+             const curTime = new Date().getTime();
             if (e.keyCode === 13 && Input !== '') {
-                const newTodo = { status: false, content: Input, id: count };
+                const newTodo = { status: false, content: Input, id: curTime };
                 const nowList = List.slice();
                 const nowActive = Active.slice();
                 nowActive.push(newTodo);
                 nowList.push(newTodo);
-                setCount(count + 1);
                 setList(nowList);
                 setActive(nowActive);
                 setInput('');
@@ -143,6 +165,7 @@ function Layout() {
     useEffect(() => {
         SetStorage('List',List)
     },[List])
+
 
 
 

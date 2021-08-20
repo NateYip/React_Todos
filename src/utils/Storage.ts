@@ -1,10 +1,5 @@
-interface todo {
-    id: number;
-    status: boolean;
-    content: string;
-}
 
-function SetStorage (key:string, val:todo[]) {
+function SetStorage (key:string, val:any) {
     console.log("SetStorage")
     const curTime = new Date().getTime();
     localStorage.setItem(key, JSON.stringify({ 
