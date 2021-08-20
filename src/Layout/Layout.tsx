@@ -5,6 +5,10 @@ import CompletedTodos from '../pages/CompletedTodos/CompletedTodos'
 import Style from './Layout.module.css';
 import InputTodos from '../components/Input/Input'
 import { useState, useEffect, useCallback } from 'react';
+//eslint-disable-next-line 
+import {SetStorage,GetStorage} from '../utils/Storage'
+
+
 interface todo {
     id: number;
     status: boolean;
@@ -16,7 +20,10 @@ function Layout() {
     const [Active, setActive] = useState<todo[]>([]);
     const [Completed, setCompleted] = useState<todo[]>([]);
     const [count, setCount] = useState<number>(0);
-
+    useEffect(()=>{
+        setList(GetStorage('List'))
+    },[])
+    
 
     //update List Active Completed
     const memoizedUpdate = useCallback(() => {
@@ -41,6 +48,7 @@ function Layout() {
         }
     },[List])
 
+    
 
     function ComplateAll() {
         const nowList = List.map((item: todo) => {
@@ -120,7 +128,7 @@ function Layout() {
             }
         }
         // eslint-disable-next-line
-        , [Input])
+        , [])
 
 
     useEffect(() => {
@@ -129,8 +137,10 @@ function Layout() {
             document.removeEventListener('keydown', handleKeydown);
         }
         //eslint-disable-next-line 
-    }, [Input])
-
+    }, [])
+    useEffect(() => {
+        SetStorage('List',List)
+    },[List])
 
 
 
