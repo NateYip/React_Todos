@@ -1,6 +1,5 @@
 
 function SetStorage (key:string, val:any) {
-    console.log("SetStorage")
     const curTime = new Date().getTime();
     localStorage.setItem(key, JSON.stringify({ 
         data: val, 
@@ -10,7 +9,6 @@ function SetStorage (key:string, val:any) {
 
 
 function GetStorage (key:string) {
-    console.log("GetStorage")
     const data:any = localStorage.getItem(key);
     const dataObj = JSON.parse(data);
     if(!dataObj){

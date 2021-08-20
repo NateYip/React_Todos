@@ -15,18 +15,19 @@ interface todo {
     status: boolean;
     content: string;
 }
+
 function Layout() {
-    const [List, setList] = useState<todo[]>([]);
     const [Input, setInput] = useState<string>('');
+    const [List, setList] = useState<todo[]>([]);
     const [Active, setActive] = useState<todo[]>([]);
     const [Completed, setCompleted] = useState<todo[]>([]);
    
     
     useEffect(()=>{
-        setList(GetStorage('List'))
+        const List = GetStorage('List')
         const newActive: todo[] = [];
         const newComplete: todo[] = [];
-        GetStorage('List').forEach((e: todo) => {
+        List.forEach((e: todo) => {
             if (e.status === false) {
                 newActive.push(e);
             } else {
@@ -43,6 +44,7 @@ function Layout() {
         } else {
             setCompleted(newComplete);
         }
+        setList(List)
         SetStorage('List',List)
         //eslint-disable-next-line
     },[])
@@ -96,7 +98,6 @@ function Layout() {
         id: number;
     }
     function HandleEvent(e: HandleEventParams) {
-        console.log("HandleEvent")
         const newList = List;
         switch (e.type) {
             case 'Change':
@@ -123,22 +124,21 @@ function Layout() {
     
 
     function Clear() {
-        console.log("Clear")
-        const nowList: todo[] = []
+        const nowList: todo[] = [];
         List.forEach((item: todo) => {
             if (item.status !== true) {
-                nowList.push(item)
+                nowList.push(item);
             }
         })
-        setList(nowList)
-        memoizedUpdate()
-        setCompleted([])
+        setList(nowList);
+        memoizedUpdate();
+        setCompleted([]);
     }
     
     //watch Enter-key to add new todo
     const handleKeydown = useCallback(
         (e: any) => {
-            console.log("handleKeyDown mount!")
+            console.log("KeyDown !");
              const curTime = new Date().getTime();
             if (e.keyCode === 13 && Input !== '') {
                 const newTodo = { status: false, content: Input, id: curTime };
@@ -163,7 +163,7 @@ function Layout() {
         //eslint-disable-next-line 
     }, [Input])
     useEffect(() => {
-        SetStorage('List',List)
+        SetStorage('List',List);
     },[List])
 
 
