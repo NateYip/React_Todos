@@ -17,7 +17,6 @@ interface todo {
 }
 
 function Layout() {
-    const [Input, setInput] = useState<string>('');
     const [List, setList] = useState<todo[]>([]);
     const [Active, setActive] = useState<todo[]>([]);
     const [Completed, setCompleted] = useState<todo[]>([]);
@@ -74,8 +73,6 @@ function Layout() {
         SetStorage('List',List)
     },[List])
 
-    
-
     function ComplateAll() {
         const nowList = List.map((item: todo) => {
             const newitem = { status: true, content: item.content, id: item.id };
@@ -86,12 +83,17 @@ function Layout() {
         setList(nowList);
     }
 
-
-    function inPutChange(e: any) {
-        const nowInput = e.target.value;
-        setInput(nowInput);
-    }
-
+    const editContent = useCallback((item:todo,id: number) => {
+        const newList = List
+        newList.forEach((e: todo)=>{
+            if(e.id === id){
+                e.content = item.content
+            }
+        })
+        setList(newList);
+        memoizedUpdate()
+        //eslint-disable-next-line
+    },[List])
 
     interface HandleEventParams {
         type: string;
@@ -121,8 +123,6 @@ function Layout() {
         }
     }
 
-    
-
     function Clear() {
         const nowList: todo[] = [];
         List.forEach((item: todo) => {
@@ -134,34 +134,18 @@ function Layout() {
         memoizedUpdate();
         setCompleted([]);
     }
-    
-    //watch Enter-key to add new todo
-    const handleKeydown = useCallback(
-        (e: any) => {
-            console.log("KeyDown !");
-             const curTime = new Date().getTime();
-            if (e.keyCode === 13 && Input !== '') {
-                const newTodo = { status: false, content: Input, id: curTime };
+    function AddtoList(e:string){
+        const curTime = new Date().getTime();
+        const newTodo = { status: false, content: e, id: curTime };
                 const nowList = List.slice();
                 const nowActive = Active.slice();
                 nowActive.push(newTodo);
                 nowList.push(newTodo);
                 setList(nowList);
                 setActive(nowActive);
-                setInput('');
-            }
-        }
-        // eslint-disable-next-line
-        , [Input])
+    }
+    
 
-
-    useEffect(() => {
-        document.addEventListener('keydown', handleKeydown);
-        return () => {
-            document.removeEventListener('keydown', handleKeydown);
-        }
-        //eslint-disable-next-line 
-    }, [Input])
     useEffect(() => {
         SetStorage('List',List);
     },[List])
@@ -186,8 +170,7 @@ function Layout() {
                         className={Style.inputRight}
                     >
                         <InputTodos
-                            value={Input}
-                            onChange={(e: any) => inPutChange(e)} />
+                            AddtoList={(e:string) =>AddtoList(e)}/>
                     </div>
                 </div>
             <HashRouter  >
@@ -234,18 +217,21 @@ function Layout() {
                         </Route>
                         <Route path={'/All'}>
                             <AllTodos
+                                Eidt={(e:todo , id:number)=>editContent(e,id)}
                                 Change={(e: number) => HandleEvent({ type: 'Change', id: e })}
                                 Delete={(e: number) => HandleEvent({ type: 'Delete', id: e })}
                                 List={List} />
                         </Route>
                         <Route path={'/Left'} >
                             <LeftTodos
+                                Eidt={(e:todo , id:number)=>editContent(e,id)}
                                 Change={(e: number) => HandleEvent({ type: 'Change', id: e })}
                                 Delete={(e: number) => HandleEvent({ type: 'Delete', id: e })}
                                 List={Active} />
                         </Route>
                         <Route path={'/Completed'}>
                             <CompletedTodos
+                                Eidt={(e:todo , id:number)=>editContent(e,id)}
                                 Change={(e: number) => HandleEvent({ type: 'Change', id: e })}
                                 Delete={(e: number) => HandleEvent({ type: 'Delete', id: e })}
                                 List={Completed} />

@@ -9,6 +9,7 @@ interface todoProps {
     Change(e:number): void;
     Delete(e:number): void;
     List:todo[];
+    Eidt(e:todo ,id:number): void;
 }
 function CompletedTodos (props:todoProps){
     const List = props.List
@@ -18,6 +19,7 @@ function CompletedTodos (props:todoProps){
             
             <li className={Style.done} key = {index}>
                  <SingleList 
+                    Eidt={(e:todo,id:number) =>props.Eidt(e, id)}
                     Change= {() =>props.Change(item.id)}
                     Delete= {() =>props.Delete(item.id)}
                     status ={item.status}
