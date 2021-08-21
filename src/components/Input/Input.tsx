@@ -13,16 +13,13 @@ function InputTodos (props: inputProps) {
 
     function inPutChange(e: any) {
         setIsEdit(true);
-        setInput(e.target.value)
+        setInput(e.target.value);
     }
 
     function editDone() {
-        setIsEdit(false)
-        //call father
-        props.AddtoList(Input)
-        if (inputRef.current) {
-            inputRef.current.blur();
-        }
+        setIsEdit(false);
+        props.AddtoList(Input);
+        setInput('');        
     }
 
     function onKeyDown(e:any){
@@ -32,7 +29,7 @@ function InputTodos (props: inputProps) {
     }
 
     function onBlur(){
-        setIsEdit(false)
+        setIsEdit(false);
     }
 
     return (
@@ -41,6 +38,7 @@ function InputTodos (props: inputProps) {
             
             <input
             onKeyDown={onKeyDown}
+            onFocus={inPutChange}
             onBlur={onBlur}
             className={Style.input}
             placeholder="Input your Todos"
